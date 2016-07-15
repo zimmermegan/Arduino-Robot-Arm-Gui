@@ -1,15 +1,17 @@
 #include <Servo.h>
 //#include <Dynamixel_Serial.h>
 //#include <NewSoftSerial.h>
-Servo myservo;
-Servo gripper;  // create servo object to control a servo
-//Servo joint;
-//Servo base;
 
-// twelve servo objects can be created on most boards
+//Initializing our two servos
+Servo myservo;
+Servo gripper;  
+
 
 int pos = 0;    // variable to store the servo position
 int posGripper = 0;
+
+//because we accidentally bought continuous rotation servos 
+//we store the value at which the servo will stop here
 int stopingContinous = 95.5;
 
 //input variables
@@ -38,19 +40,6 @@ void downCont(){
   myservo.write(95.5);
   pos -=1;
 }
-/**
-void loop() {
-
-  for (pos = 0; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    //myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(60000000);                       // waits 15ms for the servo to reach the position
-  }
-  for (pos = 90; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-  //  myservo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-}**/
 
 void openClaw(){
   //left
@@ -77,17 +66,17 @@ void grab()
   gripper.write(0);
   delay(500);
   gripper.write(95.5);
-  }
-void loop() {
-  //Serial.println("Hello world from Ardunio!"); // write a string
-
+}
+void loop()
+{
+  //getting the serial input from the python script
   if (Serial.available())
   {
     int inpu = Serial.read();
     Serial.println("current number");
     Serial.println(inpu);
     int input = int(inpu);
-    
+    //ended up having to change the values out because serial adapted them
     if (input == 50)
     {
       upCont();
@@ -109,9 +98,4 @@ void loop() {
       grab();
       }
   }
-//  val = analogRead(potpin);            // reads the value of the potentiometer (value between 0 and 1023)
-  //val = map(val, 0, 1023, 0, 180);     // scale it to use it with the servo (value between 0 and 180)
-  //myservo.write(95.5);  // sets the servo position according to the scaled value
-  //grab();
-  //delay(6000000000);                           // waits for the servo to get there
 }
